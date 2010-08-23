@@ -58,8 +58,15 @@ function _iconv($s,$t,$data){
 	}
 }
 
-function to_unicode($s) { 
+function to_unicode($s){ 
 	return preg_replace("/^\"(.*)\"$/","$1",json_encode($s));
+}
+
+function unicode_val($ob){
+	foreach($ob as $k => $v){
+		$ob[$k] = to_unicode($v);
+	}
+	return $ob;
 }
 
 ?>
