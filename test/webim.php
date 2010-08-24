@@ -1,9 +1,9 @@
 <?php
 
 require_once(dirname(__FILE__).'/../webim.class.php');
-$test = array("id" => 'test', "nick" => "Test", "show" => "available");
-$susan = array("id" => 'susan', "nick" => "Susan", "show" => "available");
-$jack = array("id" => 'jack', "nick" => "Jack", "show" => "available");
+$test = (object)array("id" => 'test', "nick" => "Test", "show" => "available");
+$susan = (object)array("id" => 'susan', "nick" => "Susan", "show" => "available");
+$jack = (object)array("id" => 'jack', "nick" => "Jack", "show" => "available");
 
 
 $im_test = new WebIM($test, "monit.cn", "public", "192.168.1.32", 8000);

@@ -15,23 +15,14 @@ require_once('http_client.php');
 
 class WebIM
 {
-	/**
-	 *
-	 * @param object $user
-	 * 	-id:
-	 * 	-nick:
-	 * 	-show:
-	 * 	-status:
-	 *
-	 * @return
-	 *
-	 */
+
 	var $user;
 	var $domain;
 	var $apikey;
 	var $host;
 	var $port;
 	var $client;
+	var $ticket;
 
 	/**
 	 * New
@@ -40,6 +31,7 @@ class WebIM
 	 * 	-id:
 	 * 	-nick:
 	 * 	-show:
+	 * 	-status:
 	 *
 	 * @param string $domain
 	 * @param string $apikey
@@ -63,7 +55,7 @@ class WebIM
 	 * @param string $buddy_ids
 	 * @param string $room_ids
 	 *
-	 * @return array
+	 * @return object
 	 * 	-success: true
 	 * 	-ticket:
 	 * 	-buddies: [&buddyInfo]
@@ -77,32 +69,37 @@ class WebIM
 			'buddies'=> $buddy_ids, 
 			'domain' => $this->domain, 
 			'apikey' => $this->apikey, 
-			'name'=> $this->user['id'], 
-			'nick'=> $this->user['nick'], 
-			'show' => $this->user['show']
+			'name'=> $this->user->id, 
+			'nick'=> $this->user->nick, 
+			'show' => $this->user->show
 		);
 		$this->client->post('/presences/online', unicode_val($data));
 		$cont = $this->client->getContent();
 		$da = json_decode($cont);
 		if($this->client->status != "200" || empty($da->ticket)){
-			return array("success" => false, "error_msg" => $cont);
+			return (object)array("success" => false, "error_msg" => $cont);
 		}else{
 			$buddies = array();
 			foreach($da->buddies as $id => $show){
-				$buddies[] = array("id" => $id, "nick" => $id, "show" => $show);
+				$buddies[] = (object)array("id" => $id, "nick" => $id, "show" => $show, "presence" => "online");
 			}
 			$rooms = array();
 			foreach($da->roominfo as $id => $count){
-				$rooms[] = array("id" => $id, "nick" => $id, "count" => $count);
+				$rooms[] = (object)array("id" => $id, "nick" => $id, "count" => $count);
 			}
-			return array("success" => true, "ticket" => $da->ticket, "buddies" => $buddies, "rooms" => $rooms);
+			$connection = (object)array(
+				"ticket" => $da->ticket,
+				"domain" => $this->domain,
+				"server" => "http://".$this->host.":".(string)$this->port."/packets",
+			);
+			return (object)array("success" => true, "connection" => $connection, "buddies" => $buddies, "rooms" => $rooms, "server_time" => microtime(true)*1000, "user" => $this->user);
 		}
 	}
 
 	/**
 	 * Check if can connect im server or not.
 	 *
-	 * @return array
+	 * @return object
 	 * 	-success: true
 	 * 	-error_msg:
 	 *
@@ -114,17 +111,17 @@ class WebIM
 			'buddies'=> "", 
 			'domain' => $this->domain, 
 			'apikey' => $this->apikey, 
-			'name'=> $this->user['id'], 
-			'nick'=> $this->user['nick'], 
-			'show' => $this->user['show']
+			'name'=> $this->user->id, 
+			'nick'=> $this->user->nick, 
+			'show' => $this->user->show
 		);
 		$this->client->post('/presences/online', unicode_val($data));
 		$cont = $this->client->getContent();
 		$da = json_decode($cont);
 		if($this->client->status != "200" || empty($da->ticket)){
-			return array("success" => false, "error_msg" => $cont);
+			return (object)array("success" => false, "error_msg" => $cont);
 		}else{
-			return array("success" => true, "ticket" => $da->ticket);
+			return (object)array("success" => true, "ticket" => $da->ticket);
 		}
 	}
 }
