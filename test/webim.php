@@ -11,7 +11,7 @@
 
 $domain = "monit.cn";
 $apikey = "public";
-$host = "192.168.1.32";
+$host = "192.168.1.16";
 $port = "8000";
 
 require_once(dirname(__FILE__).'/../webim.class.php');
@@ -22,7 +22,7 @@ $jack = (object)array("id" => 'jack', "nick" => "Jack", "show" => "available");
 
 $im_test = new WebIM($test, null, $domain, $apikey, $host, $port);
 $im = new WebIM($susan, null, $domain, $apikey, $host, $port);
-$im->online("jack,josh", "room1");
+$im->online("jack,josh", "room1,room2");
 
 $im = new WebIM($jack, null, $domain, $apikey, $host, $port);
 
@@ -64,6 +64,12 @@ debug($res == "ok", "message", $res);
 
 $res = $im->status("susan", "inputting...");
 debug($res == "ok", "status", $res);
+
+$res = $im->join("room2");
+debug($res, "join", $res);
+
+$res = $im->leave("room2");
+debug($res == "ok", "leave", $res);
 
 $res = $im->members("room1");
 debug($res, "members", $res);

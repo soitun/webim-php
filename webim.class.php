@@ -52,6 +52,58 @@ class WebIM
 	}
 
 	/**
+	 * Join room.
+	 *
+	 * @param string $room_id
+	 *
+	 * @return object room_info
+	 * 	-id
+	 * 	-count
+	 */
+
+	function join($room_id){
+		$data = array(
+			'ticket' => $this->ticket,
+			'apikey' => $this->apikey,
+			'domain' => $this->domain,
+			'nick' => $this->user->nick,
+			'room' => $room_id,
+		);
+		$this->client->post('/room/join', $data);
+		$cont = $this->client->getContent();
+		if($this->client->status == "200"){
+			$da = json_decode($cont);
+			return (object)array(
+				"id" => $room_id,
+				"count" => $da ->{$room_id},
+			);
+		}else{
+			return null;
+		}
+	}
+
+	/**
+	 * Leave room.
+	 *
+	 * @param string $room_id
+	 *
+	 * @return ok
+	 *
+	 */
+
+	function leave($room_id){
+		$data = array(
+			'ticket' => $this->ticket,
+			'apikey' => $this->apikey,
+			'domain' => $this->domain,
+			'nick' => $this->user->nick,
+			'room' => $room_id,
+		);
+		$this->client->post('/room/leave', $data);
+		return $this->client->getContent();
+	}
+
+	/**
 	 * Get room members.
 	 *
 	 * @param string $room_id
