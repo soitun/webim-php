@@ -274,7 +274,7 @@ class WebIM
 	}
 
 	/**
-	 * Check if can connect im server or not.
+	 * Check the server is connectable or not.
 	 *
 	 * @return object
 	 * 	-success: true
