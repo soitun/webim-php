@@ -254,7 +254,7 @@ class WebIM
 		if($this->client->status != "200" || empty($da->ticket)){
 			return (object)array("success" => false, "error_msg" => $cont);
 		}else{
-			$ticket = $da->ticket;
+			$ticket = to_unicode($da->ticket);
 			$this->ticket = $ticket;
 			$buddies = array();
 			foreach($da->buddies as $id => $show){
