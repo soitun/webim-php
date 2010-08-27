@@ -127,7 +127,7 @@ function log_install($logs, $truncate_size, $html = false){
 }
 function unwritable_log($paths, $truncate_size = 0, $html = false){
 	$head = "无可写权限";
-	$desc = "下面这些文件或目录需要可写权限才能继续安装，请修改这些文件以及文件夹内所有文件的权限为777";
+	$desc = "下面这些文件或目录需要可写权限才能继续，请修改这些文件以及文件夹内所有文件的权限为777";
 	$markup = "";
 	if($html){
 		$markup .= '<div class="box"><h3>'.$head.'</h3><div class="box-c"><p class="box-desc">'.$desc.'</p><ul>';
