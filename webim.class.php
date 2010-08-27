@@ -298,7 +298,8 @@ class WebIM
 		if($this->client->status != "200" || empty($da->ticket)){
 			return (object)array("success" => false, "error_msg" => $cont);
 		}else{
-			$this->ticket = $da->ticket;
+			//Input is unicode
+			$this->ticket = to_unicode($da->ticket);
 			return (object)array("success" => true, "ticket" => $da->ticket);
 		}
 	}
