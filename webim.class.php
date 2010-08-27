@@ -248,13 +248,13 @@ class WebIM
 			'nick'=> $this->user->nick, 
 			'show' => $this->user->show
 		);
-		$this->client->post('/presences/online', unicode_val($data));
+		$this->client->post('/presences/online', $data);
 		$cont = $this->client->getContent();
 		$da = json_decode($cont);
 		if($this->client->status != "200" || empty($da->ticket)){
 			return (object)array("success" => false, "error_msg" => $cont);
 		}else{
-			$ticket = to_unicode($da->ticket);
+			$ticket = $da->ticket;
 			$this->ticket = $ticket;
 			$buddies = array();
 			foreach($da->buddies as $id => $show){
@@ -292,14 +292,13 @@ class WebIM
 			'nick'=> $this->user->nick, 
 			'show' => $this->user->show
 		);
-		$this->client->post('/presences/online', unicode_val($data));
+		$this->client->post('/presences/online', $data);
 		$cont = $this->client->getContent();
 		$da = json_decode($cont);
 		if($this->client->status != "200" || empty($da->ticket)){
 			return (object)array("success" => false, "error_msg" => $cont);
 		}else{
-			//Input is unicode
-			$this->ticket = to_unicode($da->ticket);
+			$this->ticket = $da->ticket;
 			return (object)array("success" => true, "ticket" => $da->ticket);
 		}
 	}
