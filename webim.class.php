@@ -43,11 +43,11 @@ class WebIM
 
 	function WebIM($user, $ticket, $domain, $apikey, $host, $port = 8000){
 		$this->user = $user;
-		$this->domain = $domain;
-		$this->apikey = $apikey;
-		$this->ticket = $ticket;
-		$this->host = $host;
-		$this->port = $port;
+		$this->domain = trim($domain);
+		$this->apikey = trim($apikey);
+		$this->ticket = trim($ticket);
+		$this->host = trim($host);
+		$this->port = trim($port);
 		$this->client = new HttpClient($this->host, $this->port);
 	}
 
