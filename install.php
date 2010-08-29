@@ -34,6 +34,35 @@ function install_db($db, $file){
 	return $logs;
 }
 
+function uninstall_db($db, $file){
+	$logs = array();
+	$sql = file_get_contents($file);
+	/* Replace @charset to database charset at first. */
+	$sql = preg_replace('/\@charset/', $db['charset'], $sql);
+	/* Add db prefix */
+	$sql = preg_replace('/\webim_/', $db['db_prefix'].'webim_', $sql);
+
+	$link = mysql_connect($db['host'], $db['username'], $db['password']);
+	mysql_select_db($db['db_name'], $link);
+	$charset = $db['charset'] || 'utf8';
+	$sqls = explode(";", $sql);
+	$succ = true;
+	$error_msg = "";
+	foreach($sqls as $k => $v){
+		$v = trim($v);
+		if(!empty($v)){
+			$result = mysql_query($v.";");
+			if(!$result){
+				$succ = false;
+				$error_msg .= mysql_error()."\n";
+			}
+		}
+	}
+	mysql_close();
+	$logs[] = array($succ, "卸载数据", $file);
+	return $logs;
+}
+
 function clean_cache($dir){
 	//delete cache files
 	$handle = opendir($dir);
@@ -98,15 +127,16 @@ function select_unwritable_path($paths){
 	}
 	return $p;
 }
-function log_install($logs, $truncate_size, $html = false){
+function log_install($logs, $truncate_size, $html = false, $uninstall = false){
+	$type = $uninstall ? "卸载" : "安装";
 	$faild_num = 0;
 	foreach($logs as $k => $v){
 		if(!$v[0]){
 			$faild_num += 1;
 		}
 	}
-	$head = $faild_num > 0 ? "安装WebIM失败" : "安装WebIM成功";
-	$desc = $faild_num > 0 ? "WebIM安装失败，请联系开发人员。" : "WebIM安装成功。";
+	$head = $faild_num > 0 ? "{$type}WebIM失败" : "{$type}WebIM成功";
+	$desc = $faild_num > 0 ? "WebIM{$type}失败，请联系开发人员。" : "WebIM{$type}成功。";
 	$markup = "";
 	if($html){
 		$markup .= '<div class="box"><h3>'.$head.'</h3><div class="box-c"><p class="box-desc">'.$desc.'</p><ul>';
