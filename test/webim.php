@@ -68,6 +68,9 @@ debug($res, "members", $res);
 $res = $im->offline();
 debug($res == "ok", "offline", $res);
 
+$res = $im->online("", "");
+debug($res->success && empty($res->rooms) && empty($res->buddies), "online with empty room and buddy", $res);
+
 echo "===================================\n";
 $succ = $count - $error;
 echo "$count test, $succ pass, $error error.\n\n";
