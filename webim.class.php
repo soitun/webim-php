@@ -10,8 +10,8 @@
  * @TODO: join, leave
  */
 
-require_once('util.php');
-require_once('http_client.php');
+require_once( dirname( __FILE__ ) . '/util.php' );
+require_once( dirname( __FILE__ ) . '/http_client.php' );
 
 class WebIM
 {
