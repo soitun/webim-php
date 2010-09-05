@@ -23,6 +23,7 @@ class WebIM
 	var $port;
 	var $client;
 	var $ticket;
+	var $version = 3;
 
 	/**
 	 * New
@@ -63,6 +64,7 @@ class WebIM
 
 	function join($room_id){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain,
@@ -93,6 +95,7 @@ class WebIM
 
 	function leave($room_id){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain,
@@ -115,6 +118,7 @@ class WebIM
 
 	function members($room_id){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain,
@@ -142,6 +146,7 @@ class WebIM
 
 	function status($to, $show){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain,
@@ -167,6 +172,7 @@ class WebIM
 
 	function message($type, $to, $body, $style=""){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain,
@@ -194,6 +200,7 @@ class WebIM
 
 	function presence($show, $status = ""){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain,
@@ -215,6 +222,7 @@ class WebIM
 
 	function offline(){
 		$data = array(
+			'version' => $this->version,
 			'ticket' => $this->ticket,
 			'apikey' => $this->apikey,
 			'domain' => $this->domain
@@ -240,6 +248,7 @@ class WebIM
 	 */
 	function online($buddy_ids, $room_ids){
 		$data = array(
+			'version' => $this->version,
 			'rooms'=> $room_ids, 
 			'buddies'=> $buddy_ids, 
 			'domain' => $this->domain, 
@@ -258,7 +267,7 @@ class WebIM
 			$this->ticket = $ticket;
 			$buddies = array();
 			foreach($da->buddies as $buddy){
-				$buddies[] = (object)array("id" => $buddy->name, "nick" => $buddy->nick, "show" => $buddy->show, "presence" => "online");
+				$buddies[] = (object)array("id" => $buddy->name, "nick" => $buddy->nick, "show" => $buddy->show, "presence" => "online", "status" => $buddy->status);
 			}
 			$rooms = array();
 			foreach($da->rooms as $room){
@@ -291,6 +300,7 @@ class WebIM
 
 	function check_connect(){
 		$data = array(
+			'version' => $this->version,
 			'rooms'=> "", 
 			'buddies'=> "", 
 			'domain' => $this->domain, 
