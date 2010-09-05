@@ -257,19 +257,26 @@ class WebIM
 			$ticket = $da->ticket;
 			$this->ticket = $ticket;
 			$buddies = array();
-			foreach($da->buddies as $id => $show){
-				$buddies[] = (object)array("id" => $id, "nick" => $id, "show" => $show, "presence" => "online");
+			foreach($da->buddies as $buddy){
+				$buddies[] = (object)array("id" => $buddy->name, "nick" => $buddy->nick, "show" => $buddy->show, "presence" => "online");
 			}
 			$rooms = array();
-			foreach($da->roominfo as $id => $count){
-				$rooms[] = (object)array("id" => $id, "nick" => $id, "count" => $count);
+			foreach($da->rooms as $room){
+				$rooms[] = (object)array("id" => $room->name, "count" => $room->total);
 			}
 			$connection = (object)array(
 				"ticket" => $ticket,
 				"domain" => $this->domain,
 				"server" => "http://".$this->host.":".(string)$this->port."/packets",
 			);
-			return (object)array("success" => true, "connection" => $connection, "buddies" => $buddies, "rooms" => $rooms, "server_time" => microtime(true)*1000, "user" => $this->user);
+			return (object)array(
+				"success" => true, 
+				"connection" => $connection, 
+				"buddies" => $buddies, 
+				"rooms" => $rooms, 
+				"server_time" => microtime(true)*1000, 
+				"user" => $this->user
+			);
 		}
 	}
 
