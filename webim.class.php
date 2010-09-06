@@ -257,6 +257,9 @@ class WebIM
 			'nick'=> $this->user->nick, 
 			'show' => $this->user->show
 		);
+		if ( isset( $this->user->visitor ) ) {
+			$data['visitor'] = $this->user->visitor;
+		}
 		$this->client->post('/presences/online', $data);
 		$cont = $this->client->getContent();
 		$da = json_decode($cont);
