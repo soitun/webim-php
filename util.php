@@ -119,4 +119,17 @@ function urlname() {
 	return ( (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://" ) . ( ( $_SERVER["SERVER_PORT"] != "80" ) ? ( $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] ) : $_SERVER["SERVER_NAME"] ) . substr( $name, 0, strrpos( $name, '/' ) ) . "/";
 }
 
+/**
+ * Output
+ */
+
+function callback( $data, $funciton = "callback" ){
+	$data = json_encode( $data );
+	if( gp( $funciton ) ){
+		return gp( $funciton ) . "($data);";
+	}else{
+		return $data;
+	}
+}
+
 ?>
