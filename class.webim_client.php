@@ -1,19 +1,15 @@
 <?php
 
 /**
- * WebIM PHP Lib
+ * WebIM Client PHP Lib
  *
  * Author: Hidden <zzdhidden@gmail.com>
  * Date: Mon Aug 23 15:15:41 CST 2010
  *
  *
- * @TODO: join, leave
  */
 
-require_once( dirname( __FILE__ ) . '/util.php' );
-require_once( dirname( __FILE__ ) . '/http_client.php' );
-
-class WebIM
+class webim_client
 {
 
 	var $user;
@@ -42,7 +38,12 @@ class WebIM
 	 *
 	 */
 
-	function WebIM($user, $ticket, $domain, $apikey, $host, $port = 8000){
+	function webim_client($user, $ticket, $domain, $apikey, $host, $port = 8000) {
+		return $this->__construct( $user, $ticket, $domain, $apikey, $host, $port );
+	}
+
+	function __construct($user, $ticket, $domain, $apikey, $host, $port = 8000) {
+		register_shutdown_function( array( &$this, '__destruct' ) );
 		$this->user = $user;
 		$this->domain = trim($domain);
 		$this->apikey = trim($apikey);
@@ -51,6 +52,17 @@ class WebIM
 		$this->port = trim($port);
 		$this->client = new HttpClient($this->host, $this->port);
 	}
+
+	/**
+	 * PHP5 style destructor and will run when database object is destroyed.
+	 *
+	 * @see wpdb::__construct()
+	 * @return bool true
+	 */
+	function __destruct() {
+		return true;
+	}
+
 
 	/**
 	 * Join room.
@@ -161,7 +173,7 @@ class WebIM
 	/**
 	 * Send message to other.
 	 *
-	 * @param string $type unicast or multcast or boardcast
+	 * @param string $type unicast or multicast or boardcast
 	 * @param string $to message receiver
 	 * @param string $body message
 	 * @param string $style css
