@@ -321,7 +321,7 @@ class webim_db {
 	 */
 	function set_prefix( $prefix, $set_table_names = true ) {
 
-		if ( preg_match( '|[^a-z0-9_]|i', $prefix ) ) {
+		if ( preg_match( '|[^`.a-z0-9_]|i', $prefix ) ) {
 			$this->bail( /*WP_I18N_DB_BAD_PREFIX*/'Invalid database prefix'/*/WP_I18N_DB_BAD_PREFIX*/ ,'invalid_db_prefix' );
 			return false;
 		}
