@@ -6,8 +6,7 @@
  *
  */
 
-function webim_gp( $key = '', $default = null ) {
-	$v = g($key);
+function webim_gp( $key, $default = null ) {
 	if( isset( $_GET[$key] ) ) {
 		$v = $_GET[$key];
 	} elseif ( isset( $_POST[$key] ) ) {
@@ -16,6 +15,39 @@ function webim_gp( $key = '', $default = null ) {
 		$v = $default;
 	}
 	return $v;
+}
+
+/**
+ * Convert string ids to array
+ *
+ * @param string $ids
+ *
+ * @return array ids
+ *
+ */
+
+
+function webim_ids_array( $ids ){
+	return ($ids===NULL || $ids==="") ? array() : (is_array($ids) ? array_unique($ids) : array_unique(explode(",", $ids)));
+}
+
+/**
+ * Validate param presence
+ *
+ */
+
+function webim_validate_presence() {
+	$keys = func_get_args();
+	$invalid_keys = array();
+	foreach( $keys as $key ) {
+		$val = webim_gp( $key );
+		if ( !$val || !trim( $val )  ) 
+			$invalid_keys[] = $key;
+	}
+	if( $invalid_keys ) {
+		header( "HTTP/1.0 400 Bad Request" );
+		exit( "Empty get " . implode( ",", $invalid_keys ) );
+	}
 }
 
 /**
@@ -83,7 +115,7 @@ function webim_callback( $data, $jsonp = "callback" ){
  *
  */
 
-define( "WEBIM_HISTORY_KEYS", "to,nick,from,style,body,type,timestamp" );
+define( "WEBIM_HISTORY_KEYS", "`to`,`nick`,`from`,`style`,`body`,`type`,`timestamp`" );
 
 /**
  * Get history message
@@ -219,6 +251,7 @@ function webim_get_settings( $type = 'web' ) {
 	if( $data ){
 		return json_decode( $data );
 	} else {
+		$imdb->insert( $imdb->webim_settings, array( "uid" => $imuser->uid, $type => "{}" ) );
 		return new stdClass();
 	}
 }

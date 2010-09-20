@@ -56,7 +56,7 @@ class webim_client
 	/**
 	 * PHP5 style destructor and will run when database object is destroyed.
 	 *
-	 * @see wpdb::__construct()
+	 * @see webim_client::__construct()
 	 * @return bool true
 	 */
 	function __destruct() {
