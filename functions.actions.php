@@ -4,7 +4,16 @@ function webim_action_online() {
 	global $imuser, $imclient, $_IMC, $im_is_login;
 
 	if ( !$im_is_login ) {
-		exit( "Require param \$login, \$password" );
+		if ( $_IMC[ 'allow_login' ] ) {
+			webim_validate_presence( "username", "password" );
+			if( !webim_login( webim_gp("username"), webim_gp("password"), webim_gp("question"), webim_gp("answer") ) ) {
+				exit( "Login faild" );
+			} else {
+				$imclient->user = $imuser;
+			}
+		} else {
+			exit( "Require login at first" );
+		}
 	}
 
 	$im_buddies = array();//For online.
