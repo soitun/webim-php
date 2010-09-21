@@ -50,34 +50,6 @@ function webim_validate_presence() {
 	}
 }
 
-/**
- * Handle dir
- *
- */
-
-function webim_scan_subdir( $dir ){
-	$d = dir( $dir."/" );
-	$dn = array();
-	while ( false !== ( $f = $d->read() ) ) {
-		if(is_dir($dir."/".$f) && $f!='.' && $f!='..') $dn[]=$f;
-	}
-	$d->close();
-	return $dn;
-}
-
-function webim_clean_dir( $dir ){
-	if(!file_exists($dir)){
-		return ;
-	}
-	$directory = dir($dir);
-	while($entry = $directory->read()) {
-		$filename = $dir.'/'.$entry;
-		if(is_file($filename)) {
-			@unlink($filename);
-		}
-	}
-	$directory->close();
-}
 
 /** 
  * url helper 
