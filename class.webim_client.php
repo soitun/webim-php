@@ -193,7 +193,7 @@ class webim_client
 			'to' => $to,
 			'body' => $body,
 			'style' => $style,
-			'timestamp' => (string)microtime(true)*1000,
+			'timestamp' => (string)webim_microtime_float()*1000,
 		);
 		$this->client->post('/messages', $data);
 		return $this->client->getContent();

@@ -4,15 +4,15 @@ function webim_action_online() {
 	global $imuser, $imclient, $_IMC, $im_is_login;
 
 	if ( !$im_is_login ) {
-		if ( $_IMC[ 'allow_login' ] ) {
-			webim_validate_presence( "username", "password" );
-			if( !webim_login( webim_gp("username"), webim_gp("password"), webim_gp("question"), webim_gp("answer") ) ) {
-				exit( "Login faild" );
+		if ( !$_IMC[ 'disable_login' ] ) {
+			//webim_validate_presence( "username", "password" );
+			if( !webim_login( trim( webim_gp("username") ), trim( webim_gp("password") ), trim( webim_gp("question") ), trim( webim_gp("answer") ) ) ) {
+				exit( webim_callback( array( "success" => false, "error_msg" => "Not Authorized" ) ) );
 			} else {
 				$imclient->user = $imuser;
 			}
 		} else {
-			exit( "Require login at first" );
+			exit( webim_callback( array( "success" => false, "error_msg" => "Forbidden" ) ) );
 		}
 	}
 
@@ -144,8 +144,7 @@ function webim_action_online() {
 		echo webim_callback($data);
 
 	}else{
-		header("HTTP/1.0 404 Not Found");
-		echo webim_callback($data->error_msg);
+		exit( webim_callback( array( "success" => false, "error_msg" => empty( $data->error_msg ) ? "IM Server Not Found" : "IM Server Not Authorized", "im_error_msg" => $data->error_msg ) ) );
 	}
 }
 
@@ -246,6 +245,13 @@ function webim_action_clear_history() {
 	webim_validate_presence( "id" );
 	webim_clear_history( webim_gp("id") );
 	echo webim_callback( "ok" );
+}
+
+function webim_action_download_history() {
+	global $imuser, $imclient, $_IMC;
+	webim_validate_presence( "id", "type" );
+	$histories = webim_get_history( webim_gp("id"), webim_gp("type") );
+	include( WEBIM_PATH . "lib/templates.history.php" );
 }
 
 function webim_action_setting() {

@@ -168,7 +168,7 @@ function webim_insert_history( $type, $to, $body, $style, $send = 1 ) {
 		"nick" => $imuser->nick,
 		"body" => $body,
 		"style" => $style,
-		"timestamp" => microtime( true ) * 1000,
+		"timestamp" => webim_microtime_float() * 1000,
 		"created_at" => date( 'Y-m-d H:i:s' ),
 	) );
 }
@@ -240,6 +240,14 @@ function webim_update_settings( $data, $type = 'web' ) {
 		}
 		$imdb->update( $imdb->webim_settings, array( $type => $data ), array( 'uid' => $imuser->uid ) );
 	}
+}
+
+/** Simple function to replicate PHP 5 behaviour */
+
+function webim_microtime_float()
+{
+	list($usec, $sec) = explode(" ", microtime());
+	return ((float)$usec + (float)$sec);
 }
 
 ?>
