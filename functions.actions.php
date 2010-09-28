@@ -250,7 +250,7 @@ function webim_action_clear_history() {
 function webim_action_download_history() {
 	global $imuser, $imclient, $_IMC;
 	webim_validate_presence( "id", "type" );
-	$histories = webim_get_history( webim_gp("id"), webim_gp("type") );
+	$histories = webim_get_history( webim_gp("id"), webim_gp("type"), 1000 );
 	include( WEBIM_PATH . "lib/templates.history.php" );
 }
 
