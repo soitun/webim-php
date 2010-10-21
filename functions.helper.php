@@ -202,7 +202,7 @@ function webim_new_message_to_histroy() {
 	if ( !$imdb || !$imuser )
 		return false;
 
-	$imdb->update( $imdb->webim_histories, array( "send" => 1 ), array( "to" => $user->id, "send" => 0 ) );
+	$imdb->update( $imdb->webim_histories, array( "send" => 1 ), array( "to" => $imuser->id, "send" => 0 ) );
 }
 
 /**
