@@ -170,6 +170,27 @@ function webim_action_message() {
 	echo webim_callback( "ok" );
 }
 
+function webim_action_logmsg() {
+	global $imuser, $imclient, $_IMC;
+	webim_validate_presence( "ticket", "type", "to", "body" );
+	$msg = array(
+		"send" => 1,
+		"type" => webim_gp("type"),
+		"body" => webim_gp("body"),
+		"from" => webim_gp("from"),
+		"to" => webim_gp("to"),
+		"nick" => webim_gp("nick"),
+		"style" => webim_gp("style"),
+		"timestamp" => webim_gp("timestamp"),
+		"created_at" => date( 'Y-m-d H:i:s' ),
+	);
+	$m = $imdb->get_var( $imdb->prepare( "SELECT id FROM $imdb->webim_histories WHERE type=%s and from=%s and to=%s and nick=%s and timestamp=%s", $msg['type'], $msg['from'], $msg['to'], $msg['nick'], $msg['timestamp'] ) );
+	if ( empty( $m ) ) {
+		$imdb->insert( $imdb->webim_histories, $msg );
+	}
+	echo webim_callback( "ok" );
+}
+
 function webim_action_presence() {
 	global $imuser, $imclient, $_IMC;
 	webim_validate_presence( "ticket", "show" );
