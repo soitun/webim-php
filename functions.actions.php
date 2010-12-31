@@ -163,9 +163,10 @@ function webim_action_message() {
 	$body = webim_gp("body");
 	$style = webim_gp("style");
 	$send = $offline == "true" || $offline == "1" ? 0 : 1;
-	webim_insert_history( $type, $to, $body, $style, $send );
+	$timestamp = webim_microtime_float() * 1000;
+	webim_insert_history( $type, $to, $body, $style, $send, $timestamp );
 	if($send == 1){
-		$imclient->message($type, $to, $body, $style);
+		$imclient->message($type, $to, $body, $style, $timestamp);
 	}
 	echo webim_callback( "ok" );
 }

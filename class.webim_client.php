@@ -182,7 +182,7 @@ class webim_client
 	 *
 	 */
 
-	function message($type, $to, $body, $style=""){
+	function message($type, $to, $body, $style="", $timestamp=null){
 		$data = array(
 			'version' => $this->version,
 			'ticket' => $this->ticket,
@@ -193,7 +193,7 @@ class webim_client
 			'to' => $to,
 			'body' => $body,
 			'style' => $style,
-			'timestamp' => (string)webim_microtime_float()*1000,
+			'timestamp' => empty($timestamp) ? (string)webim_microtime_float()*1000 : $timestamp,
 		);
 		$this->client->post('/messages', $data);
 		return $this->client->getContent();

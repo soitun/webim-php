@@ -154,7 +154,7 @@ function webim_clear_history( $with ) {
  *
  */
 
-function webim_insert_history( $type, $to, $body, $style, $send = 1 ) {
+function webim_insert_history( $type, $to, $body, $style, $send = 1, $timestamp=null ) {
 	global $imdb, $imuser;
 
 	if ( !$imdb || !$imuser )
@@ -168,7 +168,7 @@ function webim_insert_history( $type, $to, $body, $style, $send = 1 ) {
 		"nick" => $imuser->nick,
 		"body" => $body,
 		"style" => $style,
-		"timestamp" => webim_microtime_float() * 1000,
+		"timestamp" => $timestamp,
 		"created_at" => date( 'Y-m-d H:i:s' ),
 	) );
 }
