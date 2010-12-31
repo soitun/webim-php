@@ -171,7 +171,7 @@ function webim_action_message() {
 }
 
 function webim_action_logmsg() {
-	global $imuser, $imclient, $_IMC;
+	global $imuser, $imclient, $_IMC, $imdb;
 	webim_validate_presence( "ticket", "type", "to", "body" );
 	$msg = array(
 		"send" => 1,
@@ -184,7 +184,8 @@ function webim_action_logmsg() {
 		"timestamp" => webim_gp("timestamp"),
 		"created_at" => date( 'Y-m-d H:i:s' ),
 	);
-	$m = $imdb->get_var( $imdb->prepare( "SELECT id FROM $imdb->webim_histories WHERE type=%s and from=%s and to=%s and nick=%s and timestamp=%s", $msg['type'], $msg['from'], $msg['to'], $msg['nick'], $msg['timestamp'] ) );
+	$q =  $imdb->prepare( "SELECT id FROM $imdb->webim_histories WHERE `type`=%s and `from`=%s and `to`=%s and `nick`=%s and `timestamp`=%s", $msg['type'], $msg['from'], $msg['to'], $msg['nick'], $msg['timestamp'] );
+	$m = $imdb->get_var( $q );
 	if ( empty( $m ) ) {
 		$imdb->insert( $imdb->webim_histories, $msg );
 	}
