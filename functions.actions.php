@@ -112,6 +112,8 @@ function webim_action_online() {
 			$b = $cache_buddies[$id];
 			$b->presence = $v->presence;
 			$b->show = $v->show;
+			if( !empty($v->status) )
+				$b->status = $v->status;
 			#show online buddy
 			$show_buddies[] = $id;
 		}
