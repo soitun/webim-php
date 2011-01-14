@@ -267,6 +267,7 @@ class webim_client
 			'apikey' => $this->apikey, 
 			'name'=> $this->user->id, 
 			'nick'=> $this->user->nick, 
+			'status'=> $this->user->status, 
 			'show' => $this->user->show
 		);
 		if ( isset( $this->user->visitor ) ) {
