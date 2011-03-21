@@ -2,6 +2,7 @@
 
 function webim_action_online() {
 	global $imuser, $imclient, $_IMC, $im_is_login;
+	$domain = webim_gp("domain");
 
 	if ( !$im_is_login ) {
 		if ( !$_IMC[ 'disable_login' ] ) {
@@ -26,7 +27,12 @@ function webim_action_online() {
 	$active_rooms = webim_ids_array( webim_gp('room_ids') );
 
 	$new_messages = webim_new_message();
-	$online_buddies = webim_get_online_buddies();
+	if( $domain ) {
+		//old version has not $domain param.
+		$online_buddies = webim_get_online_buddies($domain);
+	} else {
+		$online_buddies = webim_get_online_buddies();
+	}
 	$buddies_with_info = array();//Buddy with info.
 
 	//Active buddy who send a new message.
@@ -53,7 +59,13 @@ function webim_action_online() {
 		}
 	}
 	if(!empty($buddies_without_info) || !empty($strangers)){
-		foreach(webim_get_buddies(implode(",", $buddies_without_info), implode(",", $strangers)) as $k => $v){
+		if( $domain ) {
+			$bb = webim_get_buddies(implode(",", $buddies_without_info), implode(",", $strangers), $domain);
+		} else {
+			//old version has not $domain param.
+			$bb = webim_get_buddies(implode(",", $buddies_without_info), implode(",", $strangers));
+		}
+		foreach( $bb as $k => $v){
 			$id = $v->id;
 			$im_buddies[] = $id;
 			$v->presence = "offline";
