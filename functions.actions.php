@@ -162,7 +162,7 @@ function webim_action_online() {
 	}
 }
 
-function webim_aciton_offline() {
+function webim_action_offline() {
 	global $imuser, $imclient, $_IMC;
 	webim_validate_presence( "ticket" );
 	echo webim_callback( $imclient->offline() );
